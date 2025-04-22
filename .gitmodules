@@ -3,7 +3,7 @@
 	url = https://github.com/LaFavela/sehatin-be-user.git
 [submodule "services/user-detail"]
 	path = services/user-detail
-	url = https://github.com/LaFavela/sehatin-be-user-detail.git
+	url = https://github.com/LaFavela/sehatin-be-user-detail
 [submodule "services/auth"]
 	path = services/auth
 	url = https://github.com/LaFavela/sehatin-be-auth.git
