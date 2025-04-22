@@ -1,8 +1,8 @@
 [submodule "user"]
 	path = services/user
 	url = https://github.com/LaFavela/sehatin-be-user.git
-[submodule "services/user_detail"]
-	path = services/user_detail
+[submodule "services/user-detail"]
+	path = services/user-detail
 	url = https://github.com/LaFavela/sehatin-be-user-detail.git
 [submodule "services/auth"]
 	path = services/auth
