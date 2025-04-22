@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-detail-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-detail-service
+  template:
+    metadata:
+      labels:
+        app: user-detail-service
+    spec:
+      containers:
+        - name: user-detail-service
+          image: sehatin/user-detail-service
+          ports:
+            - containerPort: 8000
+          env:
+            - name: APP_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: shared-config
+                  key: app_key
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secret
+                  key: jwt_secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-detail-service
+spec:
+  selector:
+    app: user-detail-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000

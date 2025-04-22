@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: shared-secret
+type: Opaque
+stringData:
+  jwt_secret: "base64:RgSe3DuuLRMv+Sdfseiv4sPRP5sb7/L9jfyQLXbpk3lw1T+P2cXjkVPxj9k9+BPfIY2sVnoUUcHc9HkgmheyD2oJrwkghZyGBvCJqKPAKUo8IvEEBz7n/27zbjueLYFE48hoct/0AI3PY2anWr8O5+13X9I7IwpFdeEXv+oOneeaa60mjv/mKlHhLRz66Id8E6JOUYeFL4odm4wDUOLXVR36HmjlvKh8ALHnavR6eNyEffWUcnrkwq77QQwnwaxBw55LQnWfseoeBB5xlI5guV7dMmRDvnh6rckI51+hW4S/b6VV67zYjoFYz1r+8CZ9+piuBb1Gu78Q+W1opNmDQg=="
+
