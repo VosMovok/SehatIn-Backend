@@ -26,10 +26,22 @@ spec:
             claimName: mongodb-pvc
 ---
 apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: mongodb-service
 spec:
+  type: LoadBalancer
   selector:
     app: mongodb
   ports:
