@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  user:
+    build:
+      context: ./services/user
+      dockerfile: Dockerfile
+    container_name: user
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./services/user:/var/www/html
+    depends_on:
+      - user-mongodb
+      - user-rabbitmq
+
+  user-mongodb:
+    image: mongo
+    container_name: user-mongodb
+    ports:
+      - "27018:27017"
+    volumes:
+      - user_mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  user-rabbitmq:
+    image: rabbitmq:3-management
+    container_name: user-rabbitmq
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  user-detail:
+    build:
+      context: ./services/user-detail
+      dockerfile: Dockerfile
+    container_name: user-detail
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./services/user-detail:/var/www/html
+    depends_on:
+      - user-detail-mongodb
+      - user-detail-rabbitmq
+
+  user-detail-mongodb:
+    image: mongo
+    container_name: user-detail-mongodb
+    ports:
+      - "27019:27017"
+    volumes:
+      - user_detail_mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  user-detail-rabbitmq:
+    image: rabbitmq:3-management
+    container_name: user-detail-rabbitmq
+    ports:
+      - "5674:5672"
+      - "15674:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+volumes:
+  user_mongodb_data:
+  user_detail_mongodb_data:
