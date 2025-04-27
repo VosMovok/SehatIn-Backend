@@ -25,14 +25,14 @@ spec:
     - matches:
         - path:
             type: PathPrefix
-            value: /user
+            value: /api/users
       backendRefs:
         - name: user-service
           port: 8000
     - matches:
         - path:
             type: PathPrefix
-            value: /user-detail
+            value: /api/users/detail
       backendRefs:
         - name: user-detail-service
           port: 8000

@@ -8,10 +8,28 @@ build:
   artifacts:
     - image: sehatin/user-service
       context: services/user
+      sync:
+        manual:
+          - src: '**/*.php'
+            dest: /var/www/html
+          - src: '**/*.env'
+            dest: /var/www/html
     - image: sehatin/user-detail-service
       context: services/user-detail
+      sync:
+        manual:
+          - src: '**/*.php'
+            dest: /var/www/html
+          - src: '**/*.env'
+            dest: /var/www/html
 
 deploy:
   kubectl:
     manifests:
       - k8s/*.yml
+portForward:
+  - resourceType: service
+    resourceName: rabbitmq-service
+    namespace: default
+    port: 15672
+    localPort: 15672

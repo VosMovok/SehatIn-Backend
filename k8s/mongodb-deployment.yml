@@ -41,7 +41,7 @@ kind: Service
 metadata:
   name: mongodb-service
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: mongodb
   ports:
