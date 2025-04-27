@@ -13,7 +13,7 @@ spec:
         app: user-detail-service
     spec:
       containers:
-        - name: octane-server
+        - name: user-detail-server
           image: sehatin/user-detail-service
           ports:
             - containerPort: 8000
@@ -30,7 +30,7 @@ spec:
                   name: shared-secret
                   key: jwt_secret
 
-        - name: queue-worker
+        - name: user-detail-queue-worker
           image: sehatin/user-detail-service
           command: ["php", "artisan", "queue:work"]
           env:
