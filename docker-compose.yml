@@ -11,29 +11,10 @@ services:
     volumes:
       - ./services/user:/var/www/html
     depends_on:
-      - user-mongodb
-      - user-rabbitmq
-
-  user-mongodb:
-    image: mongo
-    container_name: user-mongodb
-    ports:
-      - "27018:27017"
-    volumes:
-      - user_mongodb_data:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-
-  user-rabbitmq:
-    image: rabbitmq:3-management
-    container_name: user-rabbitmq
-    ports:
-      - "5673:5672"
-      - "15673:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+      rabbitmq:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
 
   user-detail:
     build:
@@ -45,30 +26,34 @@ services:
     volumes:
       - ./services/user-detail:/var/www/html
     depends_on:
-      - user-detail-mongodb
-      - user-detail-rabbitmq
+      rabbitmq:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
 
-  user-detail-mongodb:
+  mongodb:
     image: mongo
-    container_name: user-detail-mongodb
+    container_name: mongodb
     ports:
-      - "27019:27017"
+      - "27017:27017"
     volumes:
-      - user_detail_mongodb_data:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      - mongodb_data:/data/db
 
-  user-detail-rabbitmq:
+  rabbitmq:
     image: rabbitmq:3-management
-    container_name: user-detail-rabbitmq
+    container_name: rabbitmq
     ports:
-      - "5674:5672"
-      - "15674:15672"
+      - "5672:5672"
+      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "check_running" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
 
 volumes:
-  user_mongodb_data:
-  user_detail_mongodb_data:
+  mongodb_data:
