@@ -33,3 +33,8 @@ portForward:
     namespace: default
     port: 15672
     localPort: 15672
+  - resourceType: service
+    resourceName: mongodb-service
+    namespace: default
+    port: 27017
+    localPort: 27017
