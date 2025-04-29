@@ -1,38 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-detail-service
+  name: auth-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: user-detail-service
+      app: auth-service
   template:
     metadata:
       labels:
-        app: user-detail-service
+        app: auth-service
     spec:
       containers:
-        - name: user-detail-server
-          image: sehatin/user-detail-service
+        - name: auth-service
+          image: sehatin/auth-service
           ports:
             - containerPort: 8000
           command: ["php", "artisan", "octane:start", "--server=swoole", "--host=0.0.0.0", "--port=8000", "--watch"]
-          env:
-            - name: APP_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: shared-secret
-                  key: app_key
-            - name: JWT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: shared-secret
-                  key: jwt_secret
-
-        - name: user-detail-queue-worker
-          image: sehatin/user-detail-service
-          command: ["php", "artisan", "queue:work"]
           env:
             - name: APP_KEY
               valueFrom:
@@ -48,10 +33,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: user-detail-service
+  name: auth-service
 spec:
   selector:
-    app: user-detail-service
+    app: auth-service
   ports:
     - protocol: TCP
       port: 8000
