@@ -13,26 +13,88 @@ spec:
         namespaces:
           from: Same
 ---
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-auth
+  namespace: traefik
+spec:
+  basicAuth:
+    secret: shared-secret
+---
+# Example: Ensure this IngressRoute definition is applied to the 'traefik' namespace
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  # This name is fine, but the namespace is crucial
+  name: traefik-dashboard-route
+  # MUST be the namespace where Traefik itself runs
+  namespace: traefik
+spec:
+  entryPoints:
+    - traefik
+  routes:
+    - match: PathPrefix(`/dashboard`) || PathPrefix(`/api`)
+      kind: Rule
+      middlewares:
+        - name: traefik-auth
+          namespace: traefik
+      services:
+        - name: api@internal
+          kind: TraefikService
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: jwt-auth-middleware
+  namespace: default
+spec:
+  forwardAuth:
+    address: "http://auth-service.default.svc.cluster.local:8000/api/auth/verify"
+    authRequestHeaders:
+      - "Authorization"
+    authResponseHeaders:
+      - X-User-ID
+      - X-User-Role
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
 metadata:
   name: app-routes
   namespace: default
 spec:
-  parentRefs:
-    - name: app-gateway
-  rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /api/users
-      backendRefs:
+  entryPoints:
+    - web
+  routes:
+    - match: PathPrefix(`/api/users/detail`)
+      kind: Rule
+      services:
+        - name: user-detail-service
+          port: 8000
+      middlewares:
+        - name: jwt-auth-middleware
+
+    - match: PathPrefix(`/api/users`)
+      kind: Rule
+      services:
         - name: user-service
           port: 8000
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /api/users/detail
-      backendRefs:
-        - name: user-detail-service
+
+    - match: PathPrefix(`/api/auth/login`)
+      kind: Rule
+      services:
+        - name: auth-service
+          port: 8000
+        # No middleware applied here
+    - match: PathPrefix(`/api/auth/register`)
+      kind: Rule
+      services:
+        - name: auth-service
+          port: 8000
+        # No middleware applied here
+
+    - match: PathPrefix(`/api/auth`)
+      kind: Rule
+      services:
+        - name: auth-service
           port: 8000
