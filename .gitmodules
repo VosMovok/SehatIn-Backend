@@ -7,3 +7,12 @@
 [submodule "services/auth"]
 	path = services/auth
 	url = https://github.com/LaFavela/sehatin-be-auth.git
+[submodule "services/message"]
+	path = services/message
+	url = https://github.com/LaFavela/sehatin-be-message.git
+[submodule "services/food"]
+	path = services/food
+	url = https://github.com/LaFavela/sehatin-be-food.git
+[submodule "services/schedule"]
+	path = services/schedule
+	url = https://github.com/LaFavela/sehatin-be-schedule.git
