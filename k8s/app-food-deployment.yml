@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: food-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: food-service
+  template:
+    metadata:
+      labels:
+        app: food-service
+    spec:
+      containers:
+        - name: food-server
+          image: sehatin/food-service
+          ports:
+            - containerPort: 8000
+          command: ["php", "artisan", "octane:start", "--server=swoole", "--host=0.0.0.0", "--port=8000", "--watch"]
+          env:
+            - name: APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secret
+                  key: app_key
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secret
+                  key: jwt_secret
+
+        - name: food-queue-worker
+          image: sehatin/food-service
+          command: ["php", "artisan", "queue:work"]
+          env:
+            - name: APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secret
+                  key: app_key
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secret
+                  key: jwt_secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: food-service
+spec:
+  selector:
+    app: food-service
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000

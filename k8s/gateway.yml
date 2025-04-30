@@ -98,3 +98,15 @@ spec:
       services:
         - name: auth-service
           port: 8000
+
+    - match: PathPrefix(`/api/foods`)
+      kind: Rule
+      services:
+        - name: food-service
+          port: 8000
+
+    - match: PathPrefix(`/api/schedules`)
+      kind: Rule
+      services:
+        - name: schedule-service
+          port: 8000

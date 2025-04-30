@@ -1,10 +1,8 @@
-apiVersion: skaffold/v2beta13
+apiVersion: skaffold/v4beta11
 kind: Config
 metadata:
   name: sehatin-app
 build:
-  local:
-    push: false
   artifacts:
     - image: sehatin/user-service
       context: services/user
@@ -14,6 +12,7 @@ build:
             dest: /var/www/html
           - src: '**/*.env'
             dest: /var/www/html
+
     - image: sehatin/user-detail-service
       context: services/user-detail
       sync:
@@ -22,6 +21,7 @@ build:
             dest: /var/www/html
           - src: '**/*.env'
             dest: /var/www/html
+
     - image: sehatin/auth-service
       context: services/auth
       sync:
@@ -31,11 +31,43 @@ build:
           - src: '**/*.env'
             dest: /var/www/html
 
-deploy:
-  kubectl:
-    manifests:
-      - k8s/*.yml
+    - image: sehatin/schedule-service
+      context: services/schedule
+      sync:
+        manual:
+          - src: '**/*.php'
+            dest: /var/www/html
+          - src: '**/*.env'
+            dest: /var/www/html
 
+    - image: sehatin/food-service
+      context: services/food
+      sync:
+        manual:
+          - src: '**/*.php'
+            dest: /var/www/html
+          - src: '**/*.env'
+            dest: /var/www/html
+
+  local:
+    push: false
+
+deploy:
+  kubectl: { }
+  helm:
+    releases:
+      - name: traefik
+        remoteChart: traefik
+        repo: https://traefik.github.io/charts
+        namespace: traefik
+        version: 35.2.0
+        createNamespace: true
+        valuesFiles:
+          - ./traefik-values.yaml
+manifests:
+  rawYaml:
+    - k8s/*.yml
+    - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml
 portForward:
   - resourceType: service
     resourceName: rabbitmq-service
@@ -57,3 +89,8 @@ portForward:
     namespace: traefik
     port: 8080
     localPort: 8080
+#  - resourceType: service
+#    resourceName: kubeapps
+#    namespace: kubeapps
+#    port: 8081
+#    localPort: 8080

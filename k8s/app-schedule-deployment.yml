@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: schedule-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: schedule-service
+  template:
+    metadata:
+      labels:
+        app: schedule-service
+    spec:
+      containers:
+        - name: schedule-server
+          image: sehatin/schedule-service
+          ports:
+            - containerPort: 8000
+          command: ["php", "artisan", "octane:start", "--server=swoole", "--host=0.0.0.0", "--port=8000", "--watch"]
+          env:
+            - name: APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secret
+                  key: app_key
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secret
+                  key: jwt_secret
+
+        - name: schedule-queue-worker
+          image: sehatin/schedule-service
+          command: ["php", "artisan", "queue:work"]
+          env:
+            - name: APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secret
+                  key: app_key
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secret
+                  key: jwt_secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: schedule-service
+spec:
+  selector:
+    app: schedule-service
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
