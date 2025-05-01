@@ -49,6 +49,15 @@ build:
           - src: '**/*.env'
             dest: /var/www/html
 
+    - image: sehatin/seeder-service
+      context: services/seeder
+      sync:
+        manual:
+          - src: '**/*.php'
+            dest: /var/www/html
+          - src: '**/*.env'
+            dest: /var/www/html
+
   local:
     push: false
 

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seeder-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: seeder-service
+  template:
+    metadata:
+      labels:
+        app: seeder-service
+    spec:
+      containers:
+        - name: seeder-service
+          image: sehatin/seeder-service
+          ports:
+            - containerPort: 8000
+          command: [ "php",  "artisan", db:seed" ]
+          env:
+            - name: APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secret
+                  key: app_key
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secret
+                  key: jwt_secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: seeder-service
+spec:
+  selector:
+    app: seeder-service
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
