@@ -19,3 +19,6 @@
 [submodule "services/chatbot"]
 	path = services/chatbot
 	url = https://github.com/LaFavela/sehatin-chatbot.git
+[submodule "services/seeder"]
+	path = services/seeder
+	url = https://github.com/LaFavela/sehatin-be-seeder.git

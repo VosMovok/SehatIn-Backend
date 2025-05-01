@@ -7,6 +7,7 @@
     <mapping directory="$PROJECT_DIR$/services/food" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/services/message" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/services/schedule" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/services/seeder" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/services/user" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/services/user-detail" vcs="Git" />
   </component>
