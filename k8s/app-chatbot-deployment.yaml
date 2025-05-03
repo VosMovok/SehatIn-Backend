@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatbot
+  namespace: ollama
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chatbot
+  template:
+    metadata:
+      labels:
+        app: chatbot
+    spec:
+      containers:
+        - name: chatbot
+          image: sehatin/chatbot-service # You'll need to build and push this image
+          ports:
+            - containerPort: 8000
+          env:
+            - name: OLLAMA_HOST
+              value: "ollama"
+            - name: OLLAMA_PORT
+              value: "11434"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          envFrom:
+            - configMapRef:
+                name: shared-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chatbot
+  namespace: ollama
+spec:
+  selector:
+    app: chatbot
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
