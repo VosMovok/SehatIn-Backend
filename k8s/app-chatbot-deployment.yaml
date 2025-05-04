@@ -18,6 +18,7 @@ spec:
           image: sehatin/chatbot-service # You'll need to build and push this image
           ports:
             - containerPort: 8000
+              protocol: TCP
           env:
             - name: OLLAMA_HOST
               value: "ollama"
@@ -30,9 +31,9 @@ spec:
             limits:
               cpu: "500m"
               memory: "512Mi"
-          envFrom:
-            - configMapRef:
-                name: shared-config
+          # envFrom:
+          #   - configMapRef:
+          #       name: shared-config
 ---
 apiVersion: v1
 kind: Service
@@ -44,5 +45,5 @@ spec:
     app: chatbot
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 8000
+      port: 5000
+      targetPort: 5000

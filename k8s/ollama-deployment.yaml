@@ -39,7 +39,7 @@ spec:
       volumes:
         - name: ollama-data
           hostPath:
-            path: ./.ollama
+            path: /run/desktop/mnt/host/c/Users/dzulh/.ollama
             type: DirectoryOrCreate
 ---
 apiVersion: v1

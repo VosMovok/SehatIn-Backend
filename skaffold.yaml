@@ -4,100 +4,113 @@ metadata:
   name: sehatin-app
 build:
   artifacts:
-    - image: sehatin/user-service
-      context: services/user
-      sync:
-        manual:
-          - src: '**/*.php'
-            dest: /var/www/html
-          - src: '**/*.env'
-            dest: /var/www/html
+#     - image: sehatin/user-service
+#       context: services/user
+#       sync:
+#         manual:
+#           - src: '**/*.php'
+#             dest: /var/www/html
+#           - src: '**/*.env'
+#             dest: /var/www/html
 
-    - image: sehatin/user-detail-service
-      context: services/user-detail
-      sync:
-        manual:
-          - src: '**/*.php'
-            dest: /var/www/html
-          - src: '**/*.env'
-            dest: /var/www/html
+#     - image: sehatin/user-detail-service
+#       context: services/user-detail
+#       sync:
+#         manual:
+#           - src: '**/*.php'
+#             dest: /var/www/html
+#           - src: '**/*.env'
+#             dest: /var/www/html
 
-    - image: sehatin/auth-service
-      context: services/auth
-      sync:
-        manual:
-          - src: '**/*.php'
-            dest: /var/www/html
-          - src: '**/*.env'
-            dest: /var/www/html
+#     - image: sehatin/auth-service
+#       context: services/auth
+#       sync:
+#         manual:
+#           - src: '**/*.php'
+#             dest: /var/www/html
+#           - src: '**/*.env'
+#             dest: /var/www/html
 
-    - image: sehatin/schedule-service
-      context: services/schedule
-      sync:
-        manual:
-          - src: '**/*.php'
-            dest: /var/www/html
-          - src: '**/*.env'
-            dest: /var/www/html
+#     - image: sehatin/schedule-service
+#       context: services/schedule
+#       sync:
+#         manual:
+#           - src: '**/*.php'
+#             dest: /var/www/html
+#           - src: '**/*.env'
+#             dest: /var/www/html
 
-    - image: sehatin/food-service
-      context: services/food
-      sync:
-        manual:
-          - src: '**/*.php'
-            dest: /var/www/html
-          - src: '**/*.env'
-            dest: /var/www/html
+#     - image: sehatin/food-service
+#       context: services/food
+#       sync:
+#         manual:
+#           - src: '**/*.php'
+#             dest: /var/www/html
+#           - src: '**/*.env'
+#             dest: /var/www/html
 
-    - image: sehatin/seeder-service
-      context: services/seeder
-      sync:
-        manual:
-          - src: '**/*.php'
-            dest: /var/www/html
-          - src: '**/*.env'
-            dest: /var/www/html
+#     - image: sehatin/seeder-service
+#       context: services/seeder
+#       sync:
+#         manual:
+#           - src: '**/*.php'
+#             dest: /var/www/html
+#           - src: '**/*.env'
+#             dest: /var/www/html
+
+    - image: sehatin/chatbot-service
+      context: services/chatbot
 
   local:
     push: false
 
 deploy:
   kubectl: { }
-  helm:
-    releases:
-      - name: traefik
-        remoteChart: traefik
-        repo: https://traefik.github.io/charts
-        namespace: traefik
-        version: 35.2.0
-        createNamespace: true
-        valuesFiles:
-          - ./traefik-values.yaml
+  # helm:
+  #   releases:
+  #     - name: traefik
+  #       remoteChart: traefik
+  #       repo: https://traefik.github.io/charts
+  #       namespace: traefik
+  #       version: 35.2.0
+  #       createNamespace: true
+  #       valuesFiles:
+  #         - ./traefik-values.yaml
 manifests:
   rawYaml:
-    - k8s/*.yml
+    - k8s/*.yaml
     - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml
 portForward:
   - resourceType: service
-    resourceName: rabbitmq-service
-    namespace: default
-    port: 15672
-    localPort: 15672
+    resourceName: ollama
+    namespace: ollama
+    port: 11434
+    localPort: 11434
   - resourceType: service
-    resourceName: mongodb-service
-    namespace: default
-    port: 27017
-    localPort: 27017
-  - resourceType: service
-    resourceName: traefik
-    namespace: traefik
-    port: 80
-    localPort: 80
-  - resourceType: service
-    resourceName: traefik
-    namespace: traefik
-    port: 8080
-    localPort: 8080
+    resourceName: chatbot
+    namespace: ollama
+    port: 5000
+    localPort: 5000
+  # - resourceType: service
+  #   resourceName: rabbitmq-service
+  #   namespace: default
+  #   port: 15672
+  #   localPort: 15672
+  # - resourceType: service
+  #   resourceName: mongodb-service
+  #   namespace: default
+  #   port: 27017
+  #   localPort: 27017
+  # - resourceType: service
+  #   resourceName: traefik
+  #   namespace: traefik
+  #   port: 80
+  #   localPort: 80
+  # - resourceType: service
+  #   resourceName: traefik
+  #   namespace: traefik
+  #   port: 8080
+  #   localPort: 8080
 #  - resourceType: service
 #    resourceName: kubeapps
 #    namespace: kubeapps
