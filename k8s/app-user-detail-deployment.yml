@@ -29,21 +29,18 @@ spec:
                 secretKeyRef:
                   name: shared-secret
                   key: jwt_secret
+          envFrom:
+            - configMapRef:
+                name: shared-config
 
         - name: user-detail-queue-worker
           image: sehatin/user-detail-service
           command: ["php", "artisan", "queue:work"]
-          env:
-            - name: APP_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: shared-secret
-                  key: app_key
-            - name: JWT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: shared-secret
-                  key: jwt_secret
+          envFrom:
+            - configMapRef:
+                name: shared-config
+            - secretRef:
+                name: shared-key
 ---
 apiVersion: v1
 kind: Service
