@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: seeder-service
+spec:
+  template:
+    spec:
+      containers:
+        - name: seeder-service
+          image: sehatin/seeder-service
+          command: [ "sh", "-c", "php artisan db:seed || true" ]
+          envFrom:
+            - configMapRef:
+                name: shared-config
+            - secretRef:
+                name: shared-key
+      restartPolicy: Never

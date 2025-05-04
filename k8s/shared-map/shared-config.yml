@@ -4,4 +4,4 @@ metadata:
   name: shared-config
   namespace: default
 data:
-  DB_URI: "mongo-mongos.default.svc.cluster.local"
+  DB_HOST: "mongo-mongos.default.svc.cluster.local"

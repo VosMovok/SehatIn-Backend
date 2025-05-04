@@ -1,0 +1,97 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mongo-init-config
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: wait-for-mongo-config
+          image: alpine/mongosh:latest
+          command:
+            - sh
+            - -c
+            - |
+              for i in $(seq 1 30); do
+                mongosh mongo-config-2.mongo-config.default.svc.cluster.local:27018 && exit 0
+                echo Waiting for mongo-config...
+                sleep 5
+              done
+              exit 1
+      containers:
+        - name: mongo-init-config
+          image: alpine/mongosh:latest
+          command:
+            - bash
+            - -c
+            - |
+              mongosh mongo-config-0.mongo-config.default.svc.cluster.local:27018 --eval "rs.initiate({_id: 'configReplSet', configsvr: true, members: [
+                {_id: 0, host: 'mongo-config-0.mongo-config.default.svc.cluster.local:27018'},
+                {_id: 1, host: 'mongo-config-1.mongo-config.default.svc.cluster.local:27018'},
+                {_id: 2, host: 'mongo-config-2.mongo-config.default.svc.cluster.local:27018'}
+              ]})" || exit 0
+      restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mongo-init-shard
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: wait-for-mongo-shard
+          image: alpine/mongosh:latest
+          command:
+            - sh
+            - -c
+            - |
+              for i in $(seq 1 30); do
+                mongosh mongo-shard-2.mongo-shard.default.svc.cluster.local:27019 && exit 0
+                echo Waiting for mongo-shard...
+                sleep 5
+              done
+              exit 1
+      containers:
+        - name: mongo-init-shard
+          image: alpine/mongosh:latest
+          command:
+            - bash
+            - -c
+            - |
+              mongosh mongo-shard-0.mongo-shard.default.svc.cluster.local:27019 --eval "rs.initiate({_id: 'shardReplSet', members: [
+                {_id: 0, host: 'mongo-shard-0.mongo-shard.default.svc.cluster.local:27019'},
+                {_id: 1, host: 'mongo-shard-1.mongo-shard.default.svc.cluster.local:27019'},
+                {_id: 2, host: 'mongo-shard-2.mongo-shard.default.svc.cluster.local:27019'}
+              ]})" || exit 0
+      restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mongo-add-shards
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: wait-for-mongo-shard
+          image: alpine/mongosh:latest
+          command:
+            - sh
+            - -c
+            - |
+              for i in $(seq 1 30); do
+                mongosh mongo-mongos.default.svc.cluster.local:27017 && mongosh mongo-shard-2.mongo-shard.default.svc.cluster.local:27019 && exit 0
+                echo Waiting for mongo-shard...
+                sleep 5
+              done
+              exit 1
+      containers:
+        - name: mongo-add-shards
+          image: alpine/mongosh:latest
+          command:
+            - bash
+            - -c
+            - |
+              mongosh mongo-mongos.default.svc.cluster.local:27017 --eval "sh.addShard('shardReplSet/mongo-shard-0.mongo-shard.default.svc.cluster.local:27019,mongo-shard-1.mongo-shard.default.svc.cluster.local:27019,mongo-shard-2.mongo-shard.default.svc.cluster.local:27019')" || exit 0
+      restartPolicy: OnFailure

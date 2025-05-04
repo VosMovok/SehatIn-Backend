@@ -1,0 +1,44 @@
+# k8s/mongodb/mongodb-shard-config.yml (mongo-config Service and StatefulSet)
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-config
+spec:
+  clusterIP: None
+  selector:
+    role: mongo-config
+  ports:
+    - port: 27018
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo-config
+spec:
+  serviceName: mongo-config
+  replicas: 3
+  selector:
+    matchLabels:
+      role: mongo-config
+  template:
+    metadata:
+      labels:
+        role: mongo-config
+    spec:
+      containers:
+        - name: mongo-config
+          image: mongo:latest
+          command: ["mongod", "--configsvr", "--replSet", "configReplSet", "--port", "27018", "--bind_ip_all"]
+          ports:
+            - containerPort: 27018
+          volumeMounts:
+            - name: mongo-config-data
+              mountPath: /data/db
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-config-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

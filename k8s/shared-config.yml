@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: shared-config
-data:
-  yes: "base64:crhxbQjch1EQ0yCf1b6ndQJMDLeYDRWRIJQr4LmsCZTmc+d3ku83u25iyLzb+qVaNXgz3NQLvdZY4mqVZpUUn7tpJ9Z1ql+89QieSPpaReA/MZcczqVgAUwZB4Cmkh+AgWsPpn3C5uQGhwwfsgfEDSmc+HNQHXT9v6yNAFReR0hwL0B4KR/uixGnDxfoUJux/dEDtbwZuKoJD0bcFpn+KvZKegP2vazMYwFyQDwq+tqv1mLWz4aQud5hY9XrGtkPyMxBNTd5sTe96UAKNXjitr9CCkHlk7IsWRlgiLw3QtnH/cKCxkvEII+NXipeMQ1XYGQBwF7WwYZbfMyRkhDF/A=="

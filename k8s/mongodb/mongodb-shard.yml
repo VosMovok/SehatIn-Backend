@@ -1,0 +1,44 @@
+# k8s/mongodb/mongodb-shard.yml (mongo-shard Service and StatefulSet)
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-shard
+spec:
+  clusterIP: None
+  selector:
+    role: mongo-shard
+  ports:
+    - port: 27019
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo-shard
+spec:
+  serviceName: mongo-shard
+  replicas: 3
+  selector:
+    matchLabels:
+      role: mongo-shard
+  template:
+    metadata:
+      labels:
+        role: mongo-shard
+    spec:
+      containers:
+        - name: mongo-shard
+          image: mongo:latest
+          command: ["mongod", "--shardsvr", "--replSet", "shardReplSet", "--port", "27019", "--bind_ip_all"]
+          ports:
+            - containerPort: 27019
+          volumeMounts:
+            - name: mongo-shard-data
+              mountPath: /data/db
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-shard-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

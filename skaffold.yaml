@@ -75,7 +75,7 @@ deploy:
           - ./traefik-values.yaml
 manifests:
   rawYaml:
-    - k8s/*.yml
+    - k8s/*/*.yml
     - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml
 portForward:
   - resourceType: service
