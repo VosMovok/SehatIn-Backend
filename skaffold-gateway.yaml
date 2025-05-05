@@ -16,7 +16,6 @@ deploy:
         remoteChart: traefik
         repo: https://traefik.github.io/charts
         namespace: traefik
-        version: 35.2.0
         createNamespace: true
         valuesFiles:
           - ./k8s/gateway/values/traefik-values.yaml

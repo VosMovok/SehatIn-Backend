@@ -1,0 +1,25 @@
+apiVersion: skaffold/v4beta11
+kind: Config
+metadata:
+  name: sehatin-app
+build:
+  artifacts:
+    - image: sehatin/seeder-service
+      context: services/seeder
+      sync:
+        manual:
+          - src: '**/*.php'
+            dest: /var/www/html
+          - src: '**/*.env'
+            dest: /var/www/html
+
+  local:
+    push: false
+
+deploy:
+  kubectl: { }
+
+manifests:
+  rawYaml:
+    - k8s/seeder/app-seeder-job.yml
+    - k8s/shared-map/*.yml
