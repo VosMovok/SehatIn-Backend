@@ -1,0 +1,37 @@
+apiVersion: skaffold/v4beta11
+kind: Config
+metadata:
+  name: sehatin-app
+build:
+  artifacts: []
+
+  local:
+    push: false
+
+deploy:
+  kubectl: { }
+  helm:
+    releases:
+      - name: traefik
+        remoteChart: traefik
+        repo: https://traefik.github.io/charts
+        namespace: traefik
+        version: 35.2.0
+        createNamespace: true
+        valuesFiles:
+          - ./k8s/gateway/values/traefik-values.yaml
+manifests:
+  rawYaml:
+    - k8s/gateway/*.yml
+    - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml
+portForward:
+  - resourceType: service
+    resourceName: traefik
+    namespace: traefik
+    port: 80
+    localPort: 80
+  - resourceType: service
+    resourceName: traefik
+    namespace: traefik
+    port: 8080
+    localPort: 8080

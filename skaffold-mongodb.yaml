@@ -4,14 +4,6 @@ metadata:
   name: sehatin-app
 build:
   artifacts:
-#    - image: sehatin/seeder-service
-#      context: services/seeder
-#      sync:
-#        manual:
-#          - src: '**/*.php'
-#            dest: /var/www/html
-#          - src: '**/*.env'
-#            dest: /var/www/html
 
   local:
     push: false
@@ -22,7 +14,6 @@ deploy:
 manifests:
   rawYaml:
     - k8s/mongodb/*.yml
-#    - k8s/seeder/*.yml
     - k8s/shared-map/*.yml
 portForward:
   - resourceType: service
