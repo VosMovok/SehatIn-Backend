@@ -1,0 +1,23 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: sehatin-app
+build:
+  artifacts: []
+
+  local:
+    push: false
+
+deploy:
+  kubectl: { }
+  helm:
+    releases:
+      - name: rabbitmq
+        remoteChart: rabbitmq-cluster-operator
+        repo: https://charts.bitnami.com/bitnami
+        namespace: rabbitmq
+        createNamespace: true
+
+manifests:
+  rawYaml:
+    - k8s/message-broker/rabbitmq-cluster-deployment.yml
