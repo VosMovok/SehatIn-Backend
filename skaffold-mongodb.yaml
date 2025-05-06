@@ -13,8 +13,8 @@ deploy:
 
 manifests:
   rawYaml:
+    - k8s/mongodb/mongodb-namespace.yml
     - k8s/mongodb/*.yml
-    - k8s/shared-map/*.yml
 portForward:
   - resourceType: service
     resourceName: mongo-mongos
