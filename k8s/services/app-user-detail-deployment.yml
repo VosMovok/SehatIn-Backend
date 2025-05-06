@@ -18,20 +18,11 @@ spec:
           ports:
             - containerPort: 8000
           command: ["php", "artisan", "octane:start", "--server=swoole", "--host=0.0.0.0", "--port=8000", "--watch"]
-          env:
-            - name: APP_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: shared-secret
-                  key: app_key
-            - name: JWT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: shared-secret
-                  key: jwt_secret
           envFrom:
             - configMapRef:
                 name: shared-config
+            - secretRef:
+                name: shared-env
 
         - name: user-detail-queue-worker
           image: sehatin/user-detail-service
@@ -40,7 +31,7 @@ spec:
             - configMapRef:
                 name: shared-config
             - secretRef:
-                name: shared-key
+                name: shared-env
 ---
 apiVersion: v1
 kind: Service

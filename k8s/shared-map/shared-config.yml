@@ -4,4 +4,48 @@ metadata:
   name: shared-config
   namespace: default
 data:
-  DB_HOST: "mongo-mongos.default.svc.cluster.local"
+  JWT_SECRET: "base64:RgSe3DuuLRMv+Sdfseiv4sPRP5sb7/L9jfyQLXbpk3lw1T+P2cXjkVPxj9k9+BPfIY2sVnoUUcHc9HkgmheyD2oJrwkghZyGBvCJqKPAKUo8IvEEBz7n/27zbjueLYFE48hoct/0AI3PY2anWr8O5+13X9I7IwpFdeEXv+oOneeaa60mjv/mKlHhLRz66Id8E6JOUYeFL4odm4wDUOLXVR36HmjlvKh8ALHnavR6eNyEffWUcnrkwq77QQwnwaxBw55LQnWfseoeBB5xlI5guV7dMmRDvnh6rckI51+hW4S/b6VV67zYjoFYz1r+8CZ9+piuBb1Gu78Q+W1opNmDQg=="
+  APP_KEY: "base64:Arjd21/UkfPXLWb5DBinHcPDwW3phRVR35uTXmQL22E="
+
+  APP_NAME: "Laravel"
+  APP_ENV: "local"
+  APP_DEBUG: "true"
+  APP_URL: "http://localhost"
+
+  APP_LOCALE: "en"
+  APP_FALLBACK_LOCALE: "en"
+  APP_FAKER_LOCALE: "en_US"
+
+  APP_MAINTENANCE_DRIVER: "file"
+  # APP_MAINTENANCE_STORE=database
+
+  PHP_CLI_SERVER_WORKERS: "4"
+
+  BCRYPT_ROUNDS: "12"
+
+  LOG_CHANNEL: "stack"
+  LOG_STACK: "single"
+  LOG_DEPRECATIONS_CHANNEL: "null"
+  LOG_LEVEL: "debug"
+
+  DB_CONNECTION: "mongodb"
+  DB_HOST: "mongo-mongos.mongodb.svc.cluster.local"
+  DB_PORT: "27017"
+  DB_DATABASE: "sehatin"
+  DB_USERNAME: ""
+  DB_PASSWORD: ""
+
+  VITE_APP_NAME: "${APP_NAME}"
+
+  AUTH_GUARD: "api"
+
+  APP_SERVICES: "octane"
+
+  OCTANE_SERVER: "swoole"
+
+  QUEUE_CONNECTION: "rabbitmq"
+  #RABBITMQ_QUEUE: "user-deleted"
+  RABBITMQ_HOST: "rabbitmq-cluster.rabbitmq.svc.cluster.local"
+  RABBITMQ_PORT: "5672"
+  RABBITMQ_USER: "guest"
+  RABBITMQ_PASS: "guest"

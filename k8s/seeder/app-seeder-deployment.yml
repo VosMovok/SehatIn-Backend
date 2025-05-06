@@ -17,12 +17,12 @@ spec:
           image: sehatin/seeder-service
           ports:
             - containerPort: 8000
-          command: [ "sh", "-c", "php artisan db:seed || true" ]
+          command: ["php", "artisan", "octane:start", "--server=swoole", "--host=0.0.0.0", "--port=8000", "--watch"]
           envFrom:
             - configMapRef:
                 name: shared-config
             - secretRef:
-                name: shared-key
+                name: shared-env
 ---
 apiVersion: v1
 kind: Service

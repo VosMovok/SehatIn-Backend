@@ -22,7 +22,7 @@ spec:
             - configMapRef:
                 name: shared-config
             - secretRef:
-                name: shared-key
+                name: shared-env
 
         - name: food-queue-worker
           image: sehatin/food-service
@@ -31,7 +31,7 @@ spec:
             - configMapRef:
                 name: shared-config
             - secretRef:
-                name: shared-key
+                name: shared-env
 ---
 apiVersion: v1
 kind: Service

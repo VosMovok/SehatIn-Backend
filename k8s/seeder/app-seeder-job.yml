@@ -13,5 +13,5 @@ spec:
             - configMapRef:
                 name: shared-config
             - secretRef:
-                name: shared-key
+                name: shared-env
       restartPolicy: Never

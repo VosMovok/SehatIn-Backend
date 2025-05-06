@@ -63,38 +63,7 @@ build:
 
 deploy:
   kubectl: { }
-  helm:
-    releases:
-      - name: traefik
-        remoteChart: traefik
-        repo: https://traefik.github.io/charts
-        namespace: traefik
-        version: 35.2.0
-        createNamespace: true
-        valuesFiles:
-          - ./traefik-values.yaml
 manifests:
   rawYaml:
-    - k8s/*/*.yml
-    - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml
-portForward:
-  - resourceType: service
-    resourceName: rabbitmq-service
-    namespace: default
-    port: 15672
-    localPort: 15672
-  - resourceType: service
-    resourceName: mongodb-service
-    namespace: default
-    port: 27017
-    localPort: 27017
-  - resourceType: service
-    resourceName: traefik
-    namespace: traefik
-    port: 80
-    localPort: 80
-  - resourceType: service
-    resourceName: traefik
-    namespace: traefik
-    port: 8080
-    localPort: 8080
+    - k8s/shared-map/*.yml
+    - k8s/services/*.yml
