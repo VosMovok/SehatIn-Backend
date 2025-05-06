@@ -39,7 +39,7 @@ spec:
       volumes:
         - name: ollama-data
           hostPath:
-            path: ./.ollama
+            path: d/Coolyeah/Tugas Akhir/SehatIn/.ollama
             type: DirectoryOrCreate
 ---
 apiVersion: v1
