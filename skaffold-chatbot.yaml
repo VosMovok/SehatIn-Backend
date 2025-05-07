@@ -1,0 +1,22 @@
+apiVersion: skaffold/v4beta11
+kind: Config
+metadata:
+  name: sehatin-app
+build:
+  artifacts:
+    - image: sehatin/chatbot-service
+      context: services/chatbot
+      sync:
+        manual:
+          - src: '**/*.py'
+            dest: /app
+
+  local:
+    push: false
+
+deploy:
+  kubectl: { }
+
+manifests:
+  rawYaml:
+  - k8s\ollama\app-chatbot-deployment.yaml

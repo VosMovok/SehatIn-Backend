@@ -22,3 +22,4 @@ deploy:
 
 manifests:
   rawYaml:
+  # - k8s\ollama\ollama-deployment.yaml
