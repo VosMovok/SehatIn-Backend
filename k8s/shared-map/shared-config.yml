@@ -49,3 +49,10 @@ data:
   RABBITMQ_PORT: "5672"
   RABBITMQ_USER: "guest"
   RABBITMQ_PASS: "guest"
+
+  USER_SERVICE_URL: "user-service.default.svc.cluster.local"
+  USER_DETAIL_SERVICE_URL: "user-detail-service.default.svc.cluster.local"
+  FOOD_SERVICE_URL: "food-service.default.svc.cluster.local"
+  SCHEDULE_SERVICE_URL: "schedule-service.default.svc.cluster.local"
+  MESSAGE_SERVICE_URL: "message-service.default.svc.cluster.local"
+  AUTH_SERVICE_URL: "auth-service.default.svc.cluster.local"

@@ -19,6 +19,13 @@ deploy:
         createNamespace: true
         valuesFiles:
           - ./k8s/gateway/values/traefik-values.yaml
+      - name: metrics-server
+        remoteChart: metrics-server
+        repo: https://kubernetes-sigs.github.io/metrics-server/
+        namespace: kube-system
+        createNamespace: true
+        valuesFiles:
+          - ./k8s/gateway/values/metrics-server-values.yaml
 manifests:
   rawYaml:
     - k8s/gateway/*.yml
