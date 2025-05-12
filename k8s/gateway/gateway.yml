@@ -79,6 +79,7 @@ spec:
       services:
         - name: user-service
           port: 8000
+        - name: jwt-auth-middleware
 
     - match: PathPrefix(`/api/auth/login`)
       kind: Rule
@@ -98,15 +99,27 @@ spec:
       services:
         - name: auth-service
           port: 8000
+        - name: jwt-auth-middleware
 
     - match: PathPrefix(`/api/foods`)
       kind: Rule
       services:
         - name: food-service
           port: 8000
+        - name: jwt-auth-middleware
 
     - match: PathPrefix(`/api/schedules`)
       kind: Rule
       services:
         - name: schedule-service
           port: 8000
+        - name: jwt-auth-middleware
+
+    - match: PathPrefix(`/api/chat`)
+      kind: Rule
+      services:
+        - name: chatbot
+          namespace: ollama
+          port: 50051
+          scheme: h2c
+        - name: jwt-auth-middleware

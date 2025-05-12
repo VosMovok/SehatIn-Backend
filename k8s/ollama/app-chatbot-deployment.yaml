@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: chatbot
+  name: chatbot-service
   namespace: ollama
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: chatbot
+      app: chatbot-service
   template:
     metadata:
       labels:
-        app: chatbot
+        app: chatbot-service
     spec:
       containers:
-        - name: chatbot
+        - name: chatbot-service
           image: sehatin/chatbot-service # You'll need to build and push this image
           ports:
-            - containerPort: 5000
+            - containerPort: 50051
           # resources:
           #   requests:
           #     cpu: "500m"
@@ -32,7 +32,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: chatbot
+  name: chatbot-service
   namespace: ollama
 spec:
   selector:
