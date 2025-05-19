@@ -48,6 +48,14 @@ build:
             dest: /var/www/html
           - src: '**/*.env'
             dest: /var/www/html
+    - image: sehatin/message-service
+      context: services/message
+      sync:
+        manual:
+          - src: '**/*.php'
+            dest: /var/www/html
+          - src: '**/*.env'
+            dest: /var/www/html
 
   local:
     push: false

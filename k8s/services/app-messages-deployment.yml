@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: message-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: message-service
+  template:
+    metadata:
+      labels:
+        app: message-service
+    spec:
+      containers:
+        - name: message-service
+          image: sehatin/message-service
+          ports:
+            - containerPort: 8000
+          command: [ "php", "artisan", "octane:start", "--server=swoole", "--host=0.0.0.0", "--port=8000", "--watch" ]
+          envFrom:
+            - configMapRef:
+                name: shared-config
+            - secretRef:
+                name: shared-env
+        - name: message-queue-worker
+          image: sehatin/message-service
+          command: [ "php", "artisan", "rabbitmq:consume-chatbot" ]
+          envFrom:
+            - configMapRef:
+                name: shared-config
+            - secretRef:
+                name: shared-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: message-service
+spec:
+  selector:
+    app: message-service
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
